@@ -1,0 +1,25 @@
+services:
+  controller:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: ngrinder-controller
+    restart: always
+    ports:
+      - "8300:80"
+      - "16001:16001"
+      - "12000-12009:12000-12009"
+    volumes:
+      - ./ngrinder-controller:/opt/ngrinder-controller
+  agent:
+    image: ngrinder/agent:3.5.9-p1
+    platform: linux/amd64
+    restart: always
+    depends_on:
+      - controller
+    links:
+      - controller
+    environment:
+      - GRINDER_AGENT_CONTROLLER=controller:16001
+    volumes:
+      - ./ngrinder-agent:/opt/ngrinder-agent
