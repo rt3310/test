@@ -1,8 +1,8 @@
 # --- 단계 1: nGrinder 3.5.9 소스 빌드 ---
-FROM adoptopenjdk/openjdk11:alpine-slim AS build-stage
+FROM azul/zulu-openjdk:11 AS build-stage
 
 # 빌드에 필요한 도구 설치
-RUN apk add --no-cache git bash
+RUN apt-get update && apt-get install -y git bash
 
 WORKDIR /workspace
 RUN git clone https://github.com/naver/ngrinder.git .
@@ -17,7 +17,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew :ngrinder-controller:build -x test
 
 # --- 단계 2: 실행 이미지 생성 ---
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM azul/zulu-openjdk-alpine:11-jre
 
 # 빌드 결과물 복사
 COPY --from=build-stage /workspace/ngrinder-controller/build/libs/ngrinder-controller-*.war /opt/ngrinder-controller.war

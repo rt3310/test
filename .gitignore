@@ -1,0 +1,9 @@
+.ngrinder/
+.ngrinder-agent/
+
+ngrinder-controller/
+ngrinder-agent/
+
+*.log
+*.err
+*.out
